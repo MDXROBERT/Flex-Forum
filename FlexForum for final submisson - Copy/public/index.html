@@ -1,0 +1,358 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <title>FlexForum</title>
+  <link rel="stylesheet" href="./CSS/index.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&display=swap" rel="stylesheet">
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.bundle.min.js"></script>
+  <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+
+</head>
+
+<body>
+
+
+  <header>
+    <div class="container-fluid">
+      <div class="d-flex justify-content-between align-items-center">
+        <img src="./images/logo.png" alt="FlexForum Logo" id="logo" class="mr-auto">
+        <!-- Search Bar -->
+        <div class="search-bar">
+          <input id="searchInput" class="form-control" type="search" placeholder="Search user" aria-label="Search">
+          <button id="searchBtn" class="btn btn-primary">Search</button>
+        </div>
+        <div id="searchResults"></div>
+        <!-- Navbar with droopdwon menu  -->
+        <div class="dropdown">
+          <button class="navbar-toggler" type="button" id="dropdownMenuButton" data-toggle="dropdown"
+            aria-haspopup="true" aria-expanded="false">
+            <img src="./images/icon.webp" alt="Menu Icon">
+          </button>
+          <!-- Dropdown Menu -->
+          <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenuButton">
+            <a class="dropdown-item" href="#" id="register">Register</a>
+            <a class="dropdown-item" href="#" id="add-post">Add Post</a>
+            <a class="dropdown-item" href="#" id="posts">Posts</a>
+            <a class="dropdown-item" href="#" id="login">Login</a>
+          </div>
+        </div>
+      </div>
+    </div>
+
+
+    <input type="file" id="backgroundInput" accept="image/*" style="display: none;">
+    <button id="changeBackgroundBtn">Change Background</button>
+
+
+    <button id="load-users-btn" class="btn btn-primary">Pr Bros</button>
+
+    <!-- Modal or section to display users -->
+    <div class="modal fade" id="userListModal" tabindex="-1" aria-labelledby="userListModalLabel" aria-hidden="true">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="userListModalLabel">Registered Users</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body">
+            <div id="user-list"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </header>
+
+  <main>
+
+
+
+    <!-- Register Modal -->
+    <div class="modal fade" id="registerModal" tabindex="-1" role="dialog" aria-labelledby="registerModalLabel"
+      aria-hidden="true">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="registerModalLabel">Register</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body">
+            <form id="registerForm">
+              <div class="form-group">
+                <label for="registerUsername">Username</label>
+                <input type="text" class="form-control" id="registerUsername" required>
+              </div>
+              <div class="form-group">
+                <label for="registerEmail">Email</label>
+                <input type="email" class="form-control" id="registerEmail" required>
+              </div>
+              <div class="form-group">
+                <label for="registerPassword">Password</label>
+                <input type="password" class="form-control" id="registerPassword"
+                  pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}"
+                  title="Password must contain at least one number, one lowercase, one uppercase letter, and at least 8 or more characters"
+                  required>
+              </div>
+              <div class="form-group">
+                <label for="registerPhone">Phone Number</label>
+                <input type="tel" class="form-control" id="registerPhone" pattern="[0-9]{10}"
+                  title="Please enter a valid 10 digit phone number">
+              </div>
+              <button type="submit" class="btn btn-primary">Register</button>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Login Modal -->
+    <div class="modal fade" id="loginModal" tabindex="-1" role="dialog" aria-labelledby="loginModalLabel"
+      aria-hidden="true">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="loginModalLabel">Login</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body">
+            <form id="loginForm">
+              <div class="form-group">
+                <label for="loginEmail">Email</label>
+                <input type="email" class="form-control" id="loginEmail" required>
+              </div>
+              <div class="form-group">
+                <label for="loginPassword">Password</label>
+                <input type="password" class="form-control" id="loginPassword" required>
+              </div>
+              <div class="form-group">
+                <label for="loginPhoneNumber">Phone Number</label>
+                <input type="tel" class="form-control" id="loginPhoneNumber" required>
+              </div>
+              <button type="submit" class="btn btn-primary">Login</button>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Add Post Modal -->
+    <div class="modal fade" id="addPostModal" tabindex="-1" role="dialog" aria-labelledby="addPostModalLabel"
+      aria-hidden="true">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="addPostModalLabel">Add Post</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body">
+            <form id="addPostForm">
+              <div class="form-group">
+                <label for="postImage">Upload Image</label>
+                <input type="file" class="form-control-file" id="postImage" accept="image/*" required>
+              </div>
+              <div class="form-group">
+                <label for="postText">Post Text</label>
+                <textarea class="form-control" id="postText" rows="3"></textarea>
+              </div>
+              <button type="submit" class="btn btn-primary">Add Post</button>
+              <div class="form-group">
+                <label for="postVisibility">Visibility</label>
+                <select class="form-control" id="postVisibility">
+                  <option value="public">Public</option>
+                  <option value="private">Private</option>
+                </select>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Posts Modal -->
+    <div class="modal fade" id="postsGalleryModal" tabindex="-1" aria-labelledby="postsGalleryModalLabel"
+      aria-hidden="true">
+      <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="postsGalleryModalLabel">Image Gallery</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body">
+            <div id="gallery" class="gallery">
+
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <button id="click-me-btn" class="btn btn-primary" type="button" onclick="typeWriter()">Workout of the Day</button>
+    <div id="demo"></div>
+
+
+    <button id="startBtn" style="display:none;">Start Typing</button>
+    <button id="clearBtn" style="display:none;">Clear Text</button>
+
+
+
+    <script>
+      var i = 0;
+      var typingTimeout; // Global variable to hold the timeout ID
+      var txt = "Today's workout is a full-body circuit. Start with 10 minutes of cardio, then move on to 3 sets of 10 reps for each of the following exercises: push-ups, squats, lunges, and planks. Finish with a 10-minute cooldown. Remember to stay hydrated and have fun!";
+      var speed = 50;
+
+      function typeWriter() {
+        showButtons(false); // Hide buttons while typing
+        if (i < txt.length) {
+          document.getElementById("demo").innerHTML += txt.charAt(i);
+          i++;
+          typingTimeout = setTimeout(typeWriter, speed);
+        } else {
+          showButtons(true); // Show buttons when done typing
+        }
+      }
+
+      function startTyping() {
+        clearText(); // Clear existing text and timeouts
+        typeWriter(); // Start typing
+      }
+
+      function clearText() {
+        clearTimeout(typingTimeout); // Clear any queued timeouts
+        document.getElementById("demo").innerHTML = '';
+        i = 0; // Reset the index
+        showButtons(false); // Hide buttons after clearing text
+      }
+
+      function showButtons(show) {
+        var displayStyle = show ? 'block' : 'none';
+        document.getElementById("startBtn").style.display = displayStyle;
+        document.getElementById("clearBtn").style.display = displayStyle;
+      }
+
+
+      showButtons(false);
+
+
+      document.getElementById("startBtn").onclick = startTyping;
+      document.getElementById("clearBtn").onclick = clearText;
+
+    </script>
+
+
+    <!--- Content Wrapper -->
+    <h2 id="welcome" class="display-4 text-light text-center ml-3">Welcome to the Flex Forum</h2>
+    <div class="content-wrapper">
+      <!--Daily Blog -->
+      <section id="daily-blog">
+        <article class="blog-post">
+          <h3 class="blog-post-title">Daily Blog</h3> 
+          <div class="blog-post-content">
+
+          </div>
+        </article>
+      </section>
+    </div>
+    <div id="submit-blog">
+      <h3>Submit Your Daily Blog</h3>
+      <form id="dailyBlogForm">
+        <textarea id="dailyBlogText" placeholder="Write your blog..." required></textarea>
+        <button type="submit">Post Blog</button>
+      </form>
+    </div>
+
+
+
+
+    <!--Pr Pals placeholder -->
+    <div class="chat-app-container">
+      <aside id="pr-pals" class="chat-container">
+        <div class="chat-header">
+          <button id="back-to-users" class="back-to-users">&larr; Back</button>
+          <h4>PR Pals</h4>
+        </div>
+        <div id="chat-messages" class="chat-messages">
+          <!-- Messages will be appended here -->
+        </div>
+        <form id="message-input-form">
+          <input id="message-input" type="text" placeholder="Type a message..." required>
+          <button type="submit">Send</button>
+        </form>
+      </aside>
+    </div>
+
+
+
+
+
+  </main>
+  <!-- Footer -->
+  <footer>
+    <ul>
+      <li><a href="#">Terms and Conditions</a></li>
+      <li><a href="#">Instagram</a></li>
+      <li><a href="#">Facebook</a></li>
+      <li><a href="#">Twitter</a></li>
+      <li><a href="#">GitHub</a></li>
+    </ul>
+    <!-- User Icon -->
+    <i id="userIcon" class="fas fa-user-circle"
+      style="cursor:pointer; position: absolute; bottom: 20px; right: 20px; font-size: 24px;" data-toggle="modal"
+      data-target="#userOptionsModal"></i>
+  </footer>
+
+  <!-- User Options Modal -->
+  <div class="modal fade" id="userOptionsModal" tabindex="-1" role="dialog" aria-labelledby="userOptionsModalLabel"
+    aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="userOptionsModalLabel">User Options</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <p id="loggedInUser">Logged in as: <span>Not logged in</span></p>
+
+          <button class="btn btn-primary" id="logoutBtn">Logout</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+  <div class="modal fade" id="searchResultsModal" tabindex="-1" role="dialog" aria-labelledby="searchResultsModalLabel"
+    aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="searchResultsModalLabel">Search Results</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body" id="searchResultsBody">
+          <!-- Search results will be displayed here -->
+        </div>
+      </div>
+    </div>
+  </div>
+  <script src="./JavaScript/index.js"></script>
+</body>
+
+</html>
